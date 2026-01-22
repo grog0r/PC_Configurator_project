@@ -1,0 +1,99 @@
+@model PCConfigurator.Models.Nakopitel
+
+@{
+    ViewData["Title"] = "Редактировать накопитель";
+}
+
+<h1>Редактировать накопитель</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Model" />
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    Основная информация
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Model" class="form-label"></label>
+                            <input asp-for="Model" class="form-control" readonly />
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Tip" class="form-label"></label>
+                            <select asp-for="Tip" class="form-select">
+                                <option value="SSD">SSD</option>
+                                <option value="HDD">HDD</option>
+                                <option value="NVMe">NVMe</option>
+                                <option value="SATA">SATA</option>
+                            </select>
+                            <span asp-validation-for="Tip" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ObyomGb" class="form-label"></label>
+                            <input asp-for="ObyomGb" class="form-control" />
+                            <span asp-validation-for="ObyomGb" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    Производительность
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SkorostChteniyaMbS" class="form-label"></label>
+                            <input asp-for="SkorostChteniyaMbS" class="form-control" />
+                            <span asp-validation-for="SkorostChteniyaMbS" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="SkorostZapisiMbS" class="form-label"></label>
+                            <input asp-for="SkorostZapisiMbS" class="form-control" />
+                            <span asp-validation-for="SkorostZapisiMbS" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    Стоимость
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Tsena" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Tsena" class="form-control" />
+                            <span class="input-group-text">₽</span>
+                        </div>
+                        <span asp-validation-for="Tsena" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Сохранить изменения
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Отмена
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

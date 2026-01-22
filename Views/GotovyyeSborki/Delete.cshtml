@@ -1,0 +1,70 @@
+@model PCConfigurator.Models.GotovayaSborka
+
+@{
+    ViewData["Title"] = "Удалить сборку";
+}
+
+<h1>Удалить сборку</h1>
+<hr />
+
+<div class="alert alert-danger">
+    <h4>Внимание!</h4>
+    <p>Вы уверены, что хотите удалить эту сборку?</p>
+    <p>Это действие нельзя отменить.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Информация о сборке
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">ID сборки:</dt>
+            <dd class="col-sm-9">
+                <strong>@Html.DisplayFor(model => model.IdSborki)</strong>
+            </dd>
+
+            <dt class="col-sm-3">Вычислительная мощность:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.VychislitelnayaMoshchnost)
+            </dd>
+
+            <dt class="col-sm-3">Общая стоимость:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ObshchayaStoimost) ₽
+            </dd>
+
+            <dt class="col-sm-3">Общая мощность:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.MoshnostVt) Вт
+            </dd>
+
+            <dt class="col-sm-3">Материнская плата:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.MaterinskayaPlataModel)
+            </dd>
+
+            <dt class="col-sm-3">Процессор:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ProtsessorModel)
+            </dd>
+
+            <dt class="col-sm-3">Оперативная память:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.OperativnayaPamyatModel)
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-4">
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="IdSborki" />
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Удалить навсегда
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Отмена
+        </a>
+    </form>
+</div>

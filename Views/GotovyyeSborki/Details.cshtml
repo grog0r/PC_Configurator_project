@@ -1,0 +1,628 @@
+@model PCConfigurator.Models.GotovayaSborka
+
+@{
+    ViewData["Title"] = "Детали сборки";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header card-header-custom">
+        <h4 class="mb-0">
+            <i class="bi bi-eye"></i> Детали сборки: @Html.DisplayFor(model => model.IdSborki)
+        </h4>
+    </div>
+    <div class="card-body">
+        <!-- КАРТОЧКА С ОСНОВНОЙ ИНФОРМАЦИЕЙ -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-info-circle"></i> Основная информация
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">ID сборки:</dt>
+                            <dd class="col-sm-6">
+                                <strong>@Html.DisplayFor(model => model.IdSborki)</strong>
+                            </dd>
+
+                            <dt class="col-sm-6">Вычислительная мощность:</dt>
+                            <dd class="col-sm-6">
+                                <span class="badge bg-info">@Html.DisplayFor(model => model.VychislitelnayaMoshchnost)</span>
+                            </dd>
+
+                            <dt class="col-sm-6">Общая стоимость:</dt>
+                            <dd class="col-sm-6">
+                                <span class="badge bg-success">@Html.DisplayFor(model => model.ObshchayaStoimost) ₽</span>
+                            </dd>
+
+                            <dt class="col-sm-6">Общая мощность:</dt>
+                            <dd class="col-sm-6">
+                                <span class="badge bg-primary">@Html.DisplayFor(model => model.MoshnostVt) Вт</span>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-md-6">
+                        <dl class="row">
+                            <dt class="col-sm-6">Расчетная стоимость:</dt>
+                            <dd class="col-sm-6">
+                                <span class="badge bg-warning">@Model.RasschitannayaStoimost.ToString("N0") ₽</span>
+                                <small class="text-muted d-block">(сумма компонентов)</small>
+                            </dd>
+
+                            <dt class="col-sm-6">Расчетная мощность:</dt>
+                            <dd class="col-sm-6">
+                                <span class="badge bg-info">@Model.RasschitannayaMoshchnost Вт</span>
+                                <small class="text-muted d-block">(процессор + видеокарта + 20%)</small>
+                            </dd>
+
+                            <dt class="col-sm-6">Разница в стоимости:</dt>
+                            <dd class="col-sm-6">
+                                @if (Math.Abs(Model.RaznitsaStoimosti) < 0.01m)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Совпадает
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge @(Model.RaznitsaStoimosti > 0 ? "bg-danger" : "bg-warning")">
+                                        @Model.RaznitsaStoimosti.ToString("N0") ₽
+                                    </span>
+                                    <small class="text-muted d-block">
+                                        @(Model.RaznitsaStoimosti > 0 ? "Фактическая выше" : "Фактическая ниже")
+                                    </small>
+                                }
+                            </dd>
+
+                            <dt class="col-sm-6">Разница в мощности:</dt>
+                            <dd class="col-sm-6">
+                                @if (Math.Abs(Model.RaznitsaMoshchnosti) <= 10)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Совпадает
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge @(Model.RaznitsaMoshchnosti > 0 ? "bg-danger" : "bg-warning")">
+                                        @Model.RaznitsaMoshchnosti Вт
+                                    </span>
+                                    <small class="text-muted d-block">
+                                        @(Model.RaznitsaMoshchnosti > 0 ? "Фактическая выше" : "Фактическая ниже")
+                                    </small>
+                                }
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <!-- ПРОВЕРКИ КОРРЕКТНОСТИ -->
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="alert @(Model.SoketSovmestim ? "alert-success" : "alert-danger")">
+                            <h6 class="alert-heading">
+                                <i class="bi @(Model.SoketSovmestim ? "bi-check-circle" : "bi-exclamation-triangle")"></i>
+                                Совместимость сокета
+                            </h6>
+                            @if (Model.SoketSovmestim)
+                            {
+                                <p class="mb-0">
+                                    <i class="bi bi-check-lg"></i> Сокет процессора совместим с материнской платой
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="mb-0">
+                                    <i class="bi bi-x-circle"></i> Внимание! Сокет процессора не совместим с материнской платой
+                                </p>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert @(Model.BlokPitaniyaDostatochno ? "alert-success" : "alert-danger")">
+                            <h6 class="alert-heading">
+                                <i class="bi @(Model.BlokPitaniyaDostatochno ? "bi-check-circle" : "bi-exclamation-triangle")"></i>
+                                Мощность блока питания
+                            </h6>
+                            @if (Model.BlokPitaniyaDostatochno)
+                            {
+                                <p class="mb-0">
+                                    <i class="bi bi-check-lg"></i> Блок питания достаточной мощности
+                                    @if (Model.ZapasMoshchnostiProcent > 0)
+                                    {
+                                        <br><small>Запас: @Model.ZapasMoshchnostiProcent%</small>
+                                    }
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="mb-0">
+                                    <i class="bi bi-x-circle"></i> Внимание! Мощность блока питания может быть недостаточной
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КАРТОЧКА С КОМПОНЕНТАМИ -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-motherboard"></i> Компоненты сборки
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- МАТЕРИНСКАЯ ПЛАТА -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-motherboard-fill"></i> Материнская плата
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.MaterinskayaPlata != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.MaterinskayaPlata.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Форм-фактор:</dt>
+                                        <dd class="col-sm-7">@Model.MaterinskayaPlata.FormFaktor</dd>
+
+                                        <dt class="col-sm-5">Сокет:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.MaterinskayaPlata.Soket</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Макс. объем ОЗУ:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.MaterinskayaPlata.MaksimalnyyObyomOzuGb ГБ</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Тип ОЗУ:</dt>
+                                        <dd class="col-sm-7">@Model.MaterinskayaPlata.TipPodderzhivayemoyOzu</dd>
+
+                                        <dt class="col-sm-5">Накопители:</dt>
+                                        <dd class="col-sm-7">@Model.MaterinskayaPlata.TipPodderzhivayemixNakopiteli</dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.MaterinskayaPlata.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Материнская плата не указана
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ПРОЦЕССОР -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-cpu-fill"></i> Процессор
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Protsessor != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.Protsessor.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Сокет:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.Protsessor.Soket</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Тактовая частота:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.Protsessor.TaktovayaChastotaGz ГГц</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Количество ядер:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-warning">@Model.Protsessor.KolichestvoYader ядер</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Мощность (TDP):</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-danger">@Model.Protsessor.Moshchnost Вт</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.Protsessor.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Процессор не указан
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- ОПЕРАТИВНАЯ ПАМЯТЬ -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-memory"></i> Оперативная память
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.OperativnayaPamyat != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.OperativnayaPamyat.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Тип:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.OperativnayaPamyat.Tip</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Объем модуля:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.OperativnayaPamyat.ObyomModulyaGb ГБ</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Частота:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-warning">@Model.OperativnayaPamyat.ChastotaMgts МГц</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.OperativnayaPamyat.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Оперативная память не указана
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ВИДЕОКАРТА -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-gpu-card"></i> Видеокарта
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Videokarta != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.Videokarta.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Вычислительная мощность:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.Videokarta.VychislitelnayaMoshchnost</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Объем памяти:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.Videokarta.ObyemPamyatiGb ГБ</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Мощность (TDP):</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-danger">@Model.Videokarta.Moshchnost Вт</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.Videokarta.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Видеокарта не указана
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- НАКОПИТЕЛЬ -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-hdd-fill"></i> Накопитель
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Nakopitel != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.Nakopitel.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Тип:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.Nakopitel.Tip</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Объем:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.Nakopitel.ObyomGb ГБ</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Скорость чтения:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-warning">@Model.Nakopitel.SkorostChteniyaMbS МБ/с</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Скорость записи:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-warning">@Model.Nakopitel.SkorostZapisiMbS МБ/с</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.Nakopitel.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Накопитель не указан
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- БЛОК ПИТАНИЯ -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-plug-fill"></i> Блок питания
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.BlokPitaniya != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.BlokPitaniya.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Мощность:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge @(Model.BlokPitaniyaDostatochno ? "bg-success" : "bg-danger")">
+                                                @Model.BlokPitaniya.MoshchnostVt Вт
+                                            </span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Сертификация:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.BlokPitaniya.Sertifikatsiya</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Требуется системе:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-primary">@Model.MoshnostVt Вт</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Запас мощности:</dt>
+                                        <dd class="col-sm-7">
+                                            @if (Model.ZapasMoshchnostiProcent > 0)
+                                            {
+                                                <span class="badge bg-success">+@Model.ZapasMoshchnostiProcent%</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">@Model.ZapasMoshchnostiProcent%</span>
+                                            }
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.BlokPitaniya.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Блок питания не указан
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- КОРПУС -->
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-pc"></i> Корпус
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                @if (Model.Korpus != null)
+                                {
+                                    <h5 class="card-title text-primary">@Model.Korpus.Model</h5>
+                                    <dl class="row">
+                                        <dt class="col-sm-5">Поддерживаемые форм-факторы:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-info">@Model.Korpus.PodderzhivayemyyeFormFaktory</span>
+                                        </dd>
+
+                                        <dt class="col-sm-5">Размеры:</dt>
+                                        <dd class="col-sm-7">@Model.Korpus.Razmery</dd>
+
+                                        <dt class="col-sm-5">Совместимость с мат. платой:</dt>
+                                        <dd class="col-sm-7">
+                                            @if (Model.MaterinskayaPlata != null && 
+                                                 Model.Korpus.PodderzhivayemyyeFormFaktory.Contains(Model.MaterinskayaPlata.FormFaktor))
+                                            {
+                                                <span class="badge bg-success">
+                                                    <i class="bi bi-check-circle"></i> Совместим
+                                                </span>
+                                            }
+                                            else if (Model.MaterinskayaPlata != null)
+                                            {
+                                                <span class="badge bg-warning">
+                                                    <i class="bi bi-exclamation-triangle"></i> Проверить
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">Неизвестно</span>
+                                            }
+                                        </dd>
+
+                                        <dt class="col-sm-5">Стоимость:</dt>
+                                        <dd class="col-sm-7">
+                                            <span class="badge bg-success">@Model.Korpus.Tsena.ToString("N0") ₽</span>
+                                        </dd>
+                                    </dl>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Корпус не указан
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- СВОДНАЯ ИНФОРМАЦИЯ -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-calculator"></i> Сводная информация
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Итоговые данные</h5>
+                                <dl class="row">
+                                    <dt class="col-sm-6">Общая стоимость компонентов:</dt>
+                                    <dd class="col-sm-6">
+                                        <strong class="text-success">@Model.RasschitannayaStoimost.ToString("N0") ₽</strong>
+                                    </dd>
+
+                                    <dt class="col-sm-6">Фактическая стоимость:</dt>
+                                    <dd class="col-sm-6">
+                                        <strong class="@(Model.StoimostKorrektna ? "text-success" : "text-danger")">
+                                            @Model.ObshchayaStoimost.ToString("N0") ₽
+                                        </strong>
+                                    </dd>
+
+                                    <dt class="col-sm-6">Расчетная мощность:</dt>
+                                    <dd class="col-sm-6">
+                                        <strong class="text-primary">@Model.RasschitannayaMoshchnost Вт</strong>
+                                    </dd>
+
+                                    <dt class="col-sm-6">Фактическая мощность:</dt>
+                                    <dd class="col-sm-6">
+                                        <strong class="@(Model.MoshchnostKorrektna ? "text-success" : "text-danger")">
+                                            @Model.MoshnostVt Вт
+                                        </strong>
+                                    </dd>
+
+                                    <dt class="col-sm-6">Общее описание:</dt>
+                                    <dd class="col-sm-6">
+                                        <small class="text-muted">@Model.ObshchayaInformatsiya</small>
+                                    </dd>
+                                </dl>
+
+                                <div class="mt-3">
+                                    <h6>Статус сборки:</h6>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        @if (Model.SoketSovmestim)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i> Сокет совместим
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle"></i> Сокет не совместим
+                                            </span>
+                                        }
+
+                                        @if (Model.BlokPitaniyaDostatochno)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i> БП достаточен
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger">
+                                                <i class="bi bi-x-circle"></i> БП недостаточен
+                                            </span>
+                                        }
+
+                                        @if (Model.StoimostKorrektna)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle"></i> Стоимость корректна
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">
+                                                <i class="bi bi-exclamation-triangle"></i> Стоимость отличается
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- КНОПКИ ДЕЙСТВИЙ -->
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Назад к списку
+                        </a>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@Model.IdSborki" class="btn btn-warning">
+                            <i class="bi bi-pencil"></i> Редактировать
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.IdSborki" class="btn btn-danger">
+                            <i class="bi bi-trash"></i> Удалить
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

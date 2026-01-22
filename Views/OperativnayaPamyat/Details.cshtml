@@ -1,0 +1,67 @@
+@model PCConfigurator.Models.OperativnayaPamyat
+
+@{
+    ViewData["Title"] = "Детали оперативной памяти";
+}
+
+<h1>Детали оперативной памяти</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5>@Html.DisplayFor(model => model.Model)</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Модель:</dt>
+                    <dd class="col-sm-8">
+                        <strong>@Html.DisplayFor(model => model.Model)</strong>
+                    </dd>
+
+                    <dt class="col-sm-4">Тип:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-info">@Html.DisplayFor(model => model.Tip)</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Объем модуля:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-primary">@Html.DisplayFor(model => model.ObyomModulyaGb) ГБ</span>
+                    </dd>
+
+                    <dt class="col-sm-4">Частота:</dt>
+                    <dd class="col-sm-8">
+                        @Html.DisplayFor(model => model.ChastotaMgts) МГц
+                    </dd>
+
+                    <dt class="col-sm-4">Цена:</dt>
+                    <dd class="col-sm-8">
+                        <span class="badge bg-success">@Html.DisplayFor(model => model.Tsena) ₽</span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                Действия
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model.Model" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Редактировать
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model.Model" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Удалить
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-list"></i> К списку памяти
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

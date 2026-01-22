@@ -1,0 +1,60 @@
+@model PCConfigurator.Models.Videokarta
+
+@{
+    ViewData["Title"] = "Удалить видеокарту";
+}
+
+<h1>Удалить видеокарту</h1>
+<hr />
+
+<div class="alert alert-danger">
+    <h4>Внимание!</h4>
+    <p>Вы уверены, что хотите удалить эту видеокарту?</p>
+    <p>Это действие нельзя отменить.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Информация о видеокарте
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Модель:</dt>
+            <dd class="col-sm-9">
+                <strong>@Html.DisplayFor(model => model.Model)</strong>
+            </dd>
+
+            <dt class="col-sm-3">Вычислительная мощность:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.VychislitelnayaMoshchnost)
+            </dd>
+
+            <dt class="col-sm-3">Объем памяти:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ObyemPamyatiGb) ГБ
+            </dd>
+
+            <dt class="col-sm-3">Мощность:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Moshchnost) Вт
+            </dd>
+
+            <dt class="col-sm-3">Цена:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Tsena) ₽
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-4">
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Model" />
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Удалить навсегда
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Отмена
+        </a>
+    </form>
+</div>

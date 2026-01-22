@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Главная";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Добро пожаловать в Конфигуратор ПК</h1>
+    <p>Создавайте и управляйте сборками компьютеров с помощью нашего инструмента.</p>
+    
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Материнские платы</h5>
+                    <p class="card-text">@ViewBag.Stats.MotherboardsCount записей</p>
+                    <a asp-controller="MaterinskiyePlaty" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Процессоры</h5>
+                    <p class="card-text">@ViewBag.Stats.ProcessorsCount записей</p>
+                    <a asp-controller="Protsessory" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Оперативная память</h5>
+                    <p class="card-text">@ViewBag.Stats.MemoryCount записей</p>
+                    <a asp-controller="OperativnayaPamyat" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Видеокарты</h5>
+                    <p class="card-text">@ViewBag.Stats.GraphicsCardsCount записей</p>
+                    <a asp-controller="Videokarty" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Накопители</h5>
+                    <p class="card-text">@ViewBag.Stats.StorageCount записей</p>
+                    <a asp-controller="Nakopiteli" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Блоки питания</h5>
+                    <p class="card-text">@ViewBag.Stats.PowerSuppliesCount записей</p>
+                    <a asp-controller="BlokiPitaniya" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Корпуса</h5>
+                    <p class="card-text">@ViewBag.Stats.CasesCount записей</p>
+                    <a asp-controller="Korpusa" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Готовые сборки</h5>
+                    <p class="card-text">@ViewBag.Stats.BuildsCount записей</p>
+                    <a asp-controller="GotovyyeSborki" asp-action="Index" class="btn btn-primary">Просмотреть</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-5">
+        <h3>Быстрые ссылки</h3>
+        <div class="mt-3">
+            <a asp-controller="GotovyyeSborki" asp-action="Create" class="btn btn-success btn-lg me-3">Создать новую сборку</a>
+        </div>
+    </div>
+</div>

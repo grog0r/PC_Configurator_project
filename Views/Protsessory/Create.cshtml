@@ -1,0 +1,105 @@
+@model PCConfigurator.Models.Protsessor
+
+@{
+    ViewData["Title"] = "Добавить процессор";
+}
+
+<h1>Добавить процессор</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    Основная информация
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Model" class="form-label"></label>
+                            <input asp-for="Model" class="form-control" />
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                            <div class="form-text">Например: Intel Core i7-12700K</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Soket" class="form-label"></label>
+                            <input asp-for="Soket" class="form-control" />
+                            <span asp-validation-for="Soket" class="text-danger"></span>
+                            <div class="form-text">Например: LGA1700, AM4</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="TaktovayaChastotaGz" class="form-label"></label>
+                            <input asp-for="TaktovayaChastotaGz" class="form-control" step="0.01" />
+                            <span asp-validation-for="TaktovayaChastotaGz" class="text-danger"></span>
+                            <div class="form-text">Например: 3.60</div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="KolichestvoYader" class="form-label"></label>
+                            <input asp-for="KolichestvoYader" class="form-control" />
+                            <span asp-validation-for="KolichestvoYader" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label asp-for="Moshchnost" class="form-label"></label>
+                            <input asp-for="Moshchnost" class="form-control" />
+                            <span asp-validation-for="Moshchnost" class="text-danger"></span>
+                            <div class="form-text">TDP в ваттах</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    Стоимость
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Tsena" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Tsena" class="form-control" />
+                            <span class="input-group-text">₽</span>
+                        </div>
+                        <span asp-validation-for="Tsena" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Создать
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Справка
+            </div>
+            <div class="card-body">
+                <h6>Как заполнять форму:</h6>
+                <ul>
+                    <li>Указывайте полное название модели</li>
+                    <li>Проверяйте соответствие сокета</li>
+                    <li>Тактовая частота указывается в ГГц</li>
+                    <li>TDP - тепловыделение процессора</li>
+                    <li>Цена указывается в рублях</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,89 @@
+@model PCConfigurator.Models.Videokarta
+
+@{
+    ViewData["Title"] = "Добавить видеокарту";
+}
+
+<h1>Добавить видеокарту</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            
+            <div class="card mb-4">
+                <div class="card-header">
+                    Основная информация
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Model" class="form-label"></label>
+                            <input asp-for="Model" class="form-control" />
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                            <div class="form-text">Например: ASUS GeForce RTX 3070 Ti</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="VychislitelnayaMoshchnost" class="form-label"></label>
+                            <input asp-for="VychislitelnayaMoshchnost" class="form-control" />
+                            <span asp-validation-for="VychislitelnayaMoshchnost" class="text-danger"></span>
+                            <div class="form-text">Например: RTX 3070 Ti, RX 6800 XT</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ObyemPamyatiGb" class="form-label"></label>
+                            <select asp-for="ObyemPamyatiGb" class="form-select">
+                                <option value="">Выберите объем памяти</option>
+                                <option value="4">4 ГБ</option>
+                                <option value="6">6 ГБ</option>
+                                <option value="8">8 ГБ</option>
+                                <option value="12">12 ГБ</option>
+                                <option value="16">16 ГБ</option>
+                                <option value="24">24 ГБ</option>
+                            </select>
+                            <span asp-validation-for="ObyemPamyatiGb" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Moshchnost" class="form-label"></label>
+                            <input asp-for="Moshchnost" class="form-control" />
+                            <span asp-validation-for="Moshchnost" class="text-danger"></span>
+                            <div class="form-text">TDP в ваттах</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    Стоимость
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Tsena" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Tsena" class="form-control" />
+                            <span class="input-group-text">₽</span>
+                        </div>
+                        <span asp-validation-for="Tsena" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Создать
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

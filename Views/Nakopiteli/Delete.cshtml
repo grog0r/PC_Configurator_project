@@ -1,0 +1,65 @@
+@model PCConfigurator.Models.Nakopitel
+
+@{
+    ViewData["Title"] = "Удалить накопитель";
+}
+
+<h1>Удалить накопитель</h1>
+<hr />
+
+<div class="alert alert-danger">
+    <h4>Внимание!</h4>
+    <p>Вы уверены, что хотите удалить этот накопитель?</p>
+    <p>Это действие нельзя отменить.</p>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        Информация о накопителе
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Модель:</dt>
+            <dd class="col-sm-9">
+                <strong>@Html.DisplayFor(model => model.Model)</strong>
+            </dd>
+
+            <dt class="col-sm-3">Тип:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Tip)
+            </dd>
+
+            <dt class="col-sm-3">Объем:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.ObyomGb) ГБ
+            </dd>
+
+            <dt class="col-sm-3">Скорость чтения:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.SkorostChteniyaMbS) МБ/с
+            </dd>
+
+            <dt class="col-sm-3">Скорость записи:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.SkorostZapisiMbS) МБ/с
+            </dd>
+
+            <dt class="col-sm-3">Цена:</dt>
+            <dd class="col-sm-9">
+                @Html.DisplayFor(model => model.Tsena) ₽
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-4">
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Model" />
+        <button type="submit" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Удалить навсегда
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Отмена
+        </a>
+    </form>
+</div>

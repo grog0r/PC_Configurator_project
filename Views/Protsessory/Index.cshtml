@@ -1,0 +1,55 @@
+@model IEnumerable<PCConfigurator.Models.Protsessor>
+
+@{
+    ViewData["Title"] = "Процессоры";
+}
+
+<h1><i class="bi bi-cpu"></i> Процессоры</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Добавить новый процессор
+    </a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-header-custom">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Model)</th>
+                <th>@Html.DisplayNameFor(model => model.Soket)</th>
+                <th>@Html.DisplayNameFor(model => model.TaktovayaChastotaGz)</th>
+                <th>@Html.DisplayNameFor(model => model.KolichestvoYader)</th>
+                <th>@Html.DisplayNameFor(model => model.Moshchnost)</th>
+                <th>@Html.DisplayNameFor(model => model.Tsena)</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td><strong>@Html.DisplayFor(modelItem => item.Model)</strong></td>
+                    <td><span class="badge bg-info">@Html.DisplayFor(modelItem => item.Soket)</span></td>
+                    <td>@Html.DisplayFor(modelItem => item.TaktovayaChastotaGz) ГГц</td>
+                    <td><span class="badge bg-primary">@Html.DisplayFor(modelItem => item.KolichestvoYader) ядер</span></td>
+                    <td>@Html.DisplayFor(modelItem => item.Moshchnost) Вт</td>
+                    <td><span class="badge bg-success">@Html.DisplayFor(modelItem => item.Tsena) ₽</span></td>
+                    <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Details" asp-route-id="@item.Model" class="btn btn-info">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@item.Model" class="btn btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.Model" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

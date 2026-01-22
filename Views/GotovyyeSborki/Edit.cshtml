@@ -1,0 +1,290 @@
+@model PCConfigurator.Models.GotovayaSborka
+
+@{
+    ViewData["Title"] = "Редактировать сборку";
+}
+
+<div class="card shadow-sm">
+    <div class="card-header card-header-custom">
+        <h4 class="mb-0">
+            <i class="bi bi-pencil"></i> Редактировать сборку
+        </h4>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" id="buildForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="IdSborki" />
+            
+            <!-- Скрытые поля для стоимости и мощности -->
+            <input type="hidden" asp-for="ObshchayaStoimost" id="ObshchayaStoimost" />
+            <input type="hidden" asp-for="MoshnostVt" id="MoshnostVt" />
+            
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Основная информация</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="IdSborki" class="form-label"></label>
+                            <input asp-for="IdSborki" class="form-control" readonly />
+                            <span asp-validation-for="IdSborki" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="VychislitelnayaMoshchnost" class="form-label"></label>
+                            <select asp-for="VychislitelnayaMoshchnost" class="form-select">
+                                <option value="Эконом">Эконом</option>
+                                <option value="Стандартная">Стандартная</option>
+                                <option value="Игровая">Игровая</option>
+                                <option value="Профессиональная">Профессиональная</option>
+                                <option value="ULTRA">ULTRA</option>
+                            </select>
+                            <span asp-validation-for="VychislitelnayaMoshchnost" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-motherboard"></i> Компоненты сборки
+                        <span class="float-end">
+                            <span id="totalPrice" class="badge bg-success">@Model.ObshchayaStoimost.ToString("N0") ₽</span>
+                            <span id="totalPower" class="badge bg-primary ms-2">@Model.MoshnostVt Вт</span>
+                        </span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="MaterinskayaPlataModel" class="form-label">
+                                Материнская плата 
+                                <span id="motherboardPrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="MaterinskayaPlataModel" class="form-select component-select" 
+                                    data-component="materinskayaplata" data-price="motherboardPrice">
+                                <option value="">Выберите материнскую плату</option>
+                                @foreach (var item in (SelectList)ViewData["MaterinskayaPlataModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="MaterinskayaPlataModel" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="ProtsessorModel" class="form-label">
+                                Процессор 
+                                <span id="processorPrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="ProtsessorModel" class="form-select component-select" 
+                                    data-component="protsessor" data-price="processorPrice" data-power="true">
+                                <option value="">Выберите процессор</option>
+                                @foreach (var item in (SelectList)ViewData["ProtsessorModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="ProtsessorModel" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="OperativnayaPamyatModel" class="form-label">
+                                Оперативная память 
+                                <span id="memoryPrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="OperativnayaPamyatModel" class="form-select component-select" 
+                                    data-component="operativnayapamyat" data-price="memoryPrice">
+                                <option value="">Выберите оперативную память</option>
+                                @foreach (var item in (SelectList)ViewData["OperativnayaPamyatModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="OperativnayaPamyatModel" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="VideokartaModel" class="form-label">
+                                Видеокарта 
+                                <span id="gpuPrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="VideokartaModel" class="form-select component-select" 
+                                    data-component="videokarta" data-price="gpuPrice" data-power="true">
+                                <option value="">Выберите видеокарту</option>
+                                @foreach (var item in (SelectList)ViewData["VideokartaModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="VideokartaModel" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="NakopitelModel" class="form-label">
+                                Накопитель 
+                                <span id="storagePrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="NakopitelModel" class="form-select component-select" 
+                                    data-component="nakopitel" data-price="storagePrice">
+                                <option value="">Выберите накопитель</option>
+                                @foreach (var item in (SelectList)ViewData["NakopitelModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="NakopitelModel" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BlokPitaniyaModel" class="form-label">
+                                Блок питания 
+                                <span id="psuPrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="BlokPitaniyaModel" class="form-select component-select" 
+                                    data-component="blokpitaniya" data-price="psuPrice">
+                                <option value="">Выберите блок питания</option>
+                                @foreach (var item in (SelectList)ViewData["BlokPitaniyaModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="BlokPitaniyaModel" class="text-danger"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="KorpusModel" class="form-label">
+                                Корпус 
+                                <span id="casePrice" class="badge bg-secondary float-end">-</span>
+                            </label>
+                            <select asp-for="KorpusModel" class="form-select component-select" 
+                                    data-component="korpus" data-price="casePrice">
+                                <option value="">Выберите корпус</option>
+                                @foreach (var item in (SelectList)ViewData["KorpusModel"])
+                                {
+                                    <option value="@item.Value">@item.Text</option>
+                                }
+                            </select>
+                            <span asp-validation-for="KorpusModel" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-save"></i> Сохранить изменения
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Назад к списку
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        const components = {
+            materinskayaplata: { price: 0, power: 0 },
+            protsessor: { price: 0, power: 0 },
+            operativnayapamyat: { price: 0, power: 0 },
+            videokarta: { price: 0, power: 0 },
+            nakopitel: { price: 0, power: 0 },
+            blokpitaniya: { price: 0, power: 0 },
+            korpus: { price: 0, power: 0 }
+        };
+
+        function formatPrice(price) {
+            return new Intl.NumberFormat('ru-RU', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(price);
+        }
+
+        function updateComponentPrice(componentType, price, priceElementId) {
+            const priceElement = document.getElementById(priceElementId);
+            if (priceElement) {
+                priceElement.textContent = price > 0 ? formatPrice(price) + ' ₽' : '-';
+                components[componentType].price = price;
+            }
+        }
+
+        function updateTotals() {
+            let totalPrice = 0;
+            let totalPower = 0;
+            
+            for (const key in components) {
+                totalPrice += components[key].price;
+            }
+            
+            totalPower += components.protsessor.power || 0;
+            totalPower += components.videokarta.power || 0;
+            totalPower = Math.round(totalPower * 1.2);
+            
+            document.getElementById('totalPrice').textContent = formatPrice(totalPrice) + ' ₽';
+            document.getElementById('totalPower').textContent = totalPower + ' Вт';
+            document.getElementById('ObshchayaStoimost').value = totalPrice;
+            document.getElementById('MoshnostVt').value = totalPower;
+            
+            return { totalPrice, totalPower };
+        }
+
+        async function loadComponentData(selectElement) {
+            const componentType = selectElement.dataset.component;
+            const modelName = selectElement.value;
+            const priceElementId = selectElement.dataset.price;
+            const isPowerComponent = selectElement.dataset.power === 'true';
+            
+            if (!modelName) {
+                components[componentType].price = 0;
+                components[componentType].power = 0;
+                updateComponentPrice(componentType, 0, priceElementId);
+                updateTotals();
+                return;
+            }
+            
+            try {
+                const response = await fetch(
+                    `@Url.Action("GetComponentPrice", "GotovyyeSborki")?componentType=${componentType}&modelName=${encodeURIComponent(modelName)}`
+                );
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    updateComponentPrice(componentType, data.price, priceElementId);
+                    if (isPowerComponent) {
+                        components[componentType].power = data.power || 0;
+                    }
+                    updateTotals();
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+
+        // Загружаем данные для уже выбранных компонентов при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            const selects = document.querySelectorAll('.component-select');
+            selects.forEach(select => {
+                // Загружаем данные для предварительно выбранных компонентов
+                if (select.value) {
+                    setTimeout(() => loadComponentData(select), 100);
+                }
+                
+                // Назначаем обработчик изменений
+                select.addEventListener('change', function() {
+                    loadComponentData(this);
+                });
+            });
+            
+            // Инициализируем значения
+            setTimeout(updateTotals, 200);
+        });
+    </script>
+}

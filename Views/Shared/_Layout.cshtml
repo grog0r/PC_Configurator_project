@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Конфигуратор ПК</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        .table-header-custom {
+            background-color: #503fbe !important;
+            color: rgb(13, 12, 102) !important;
+        }
+        
+        .table-header-custom th {
+            color: rgb(23, 10, 121) !important;
+            font-weight: bold;
+        }
+        
+        .navbar-custom {
+            background-color: #230f98 !important;
+        }
+        
+        .footer-custom {
+            background-color: #343a40 !important;
+            color: white !important;
+        }
+        
+        .card-header-custom {
+            background-color: #6c757d !important;
+            color: white !important;
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark navbar-custom border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-pc-display"></i> Конфигуратор ПК
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house"></i> Главная
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="componentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-motherboard"></i> Компоненты
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="componentsDropdown">
+                                <li><a class="dropdown-item" asp-controller="MaterinskiyePlaty" asp-action="Index">Материнские платы</a></li>
+                                <li><a class="dropdown-item" asp-controller="Protsessory" asp-action="Index">Процессоры</a></li>
+                                <li><a class="dropdown-item" asp-controller="OperativnayaPamyat" asp-action="Index">Оперативная память</a></li>
+                                <li><a class="dropdown-item" asp-controller="Videokarty" asp-action="Index">Видеокарты</a></li>
+                                <li><a class="dropdown-item" asp-controller="Nakopiteli" asp-action="Index">Накопители</a></li>
+                                <li><a class="dropdown-item" asp-controller="BlokiPitaniya" asp-action="Index">Блоки питания</a></li>
+                                <li><a class="dropdown-item" asp-controller="Korpusa" asp-action="Index">Корпуса</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="GotovyyeSborki" asp-action="Index">
+                                <i class="bi bi-gear"></i> Готовые сборки
+                            </a>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer footer-custom text-white">
+        <div class="container text-center">
+            &copy; 2026 - Конфигуратор ПК
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
